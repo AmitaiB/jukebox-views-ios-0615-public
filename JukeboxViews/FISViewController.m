@@ -33,7 +33,6 @@
     self.textField.text = [self.playlist description];
     self.textField.backgroundColor = [UIColor clearColor];
     self.textField.editable = NO;
-
 }
 
 - (void)didReceiveMemoryWarning {
