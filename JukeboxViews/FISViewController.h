@@ -22,6 +22,6 @@
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 
 
-@property (strong, nonatomic) NSURL *url;
+@property (strong, nonatomic) NSString *url;
 
 @end

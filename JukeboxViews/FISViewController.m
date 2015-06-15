@@ -26,6 +26,7 @@
                       [[FISSong alloc] initWithTitle:@"Old Thing Back" artist:@"The Notorious BIG" album:@"Duets: The Final Chapter" andFileName:@"old_thing_back"],
                       [[FISSong alloc] initWithTitle:@"Gangsta Bleeding Love" artist:@"Snoop Dogg vs. Leona Lewis" album:@"Whatever" andFileName:@"gangsta_bleeding_love"],
                       [[FISSong alloc] initWithTitle:@"Bailando" artist:@"Enrique Iglesias" album:@"Sex and Love" andFileName:@"bailando"], nil];
+
     
     self.playlist = [[FISPlaylist alloc] initWithSongs:songs];
 
@@ -51,15 +52,13 @@
 */
 
 - (IBAction)Play:(id)sender {
-    [self Stop:(id)sender];
+//    [self Stop:(id)sender];
     NSLog(@"%@", [self.playlist songAtPosition:@([self.songNumber.text integerValue])]);
     
     FISSong *songToPlay = [self.playlist songAtPosition:@([self.songNumber.text integerValue])];
     NSString *titleOfSongToPlay = songToPlay.fileName;
     
-    self.url = [NSURL fileURLWithPath:[[NSBundle mainBundle]
-                                       pathForResource:songToPlay.fileName
-                                       ofType:@"mp3"]];
+    self.url = songToPlay.fileName;
     
     [self setupAVAudioPlayWithFileName:titleOfSongToPlay];
     [self.audioPlayer play];
@@ -112,10 +111,16 @@
 
 - (void)setupAVAudioPlayWithFileName:(NSString *)fileName{
 
+    
+    
+    NSURL *urlToUse = [NSURL fileURLWithPath:[[NSBundle mainBundle]
+                                              pathForResource:self.url
+                                              ofType:@"mp3"]];
+    
     NSError *error;
     
     self.audioPlayer = [[AVAudioPlayer alloc]
-                        initWithContentsOfURL:self.url
+                        initWithContentsOfURL:urlToUse
                         error:&error];
     if (error)
     {
@@ -125,7 +130,7 @@
         [self.audioPlayer prepareToPlay];
     }
     
-    AVAsset *asset = [AVAsset assetWithURL:self.url];
+    AVAsset *asset = [AVAsset assetWithURL:urlToUse];
     for (AVMetadataItem *metadataItem in asset.commonMetadata) {
         //NSLog(@"%@",metadataItem.commonKey);
         if ([metadataItem.commonKey isEqualToString:@"artwork"]){
